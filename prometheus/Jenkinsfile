@@ -1,0 +1,30 @@
+def git_url = 'https://github.com/rjmsas/k8-deployment.git'
+def git_branch = 'main'
+
+pipeline
+{
+    agent
+    {
+        label 'k8'
+    }
+
+    stages
+    {
+        stage('deploy')
+        {
+            
+            steps{
+                   sh '''
+                   pwd
+                   ls -ltr                   
+                   cd prometheus
+                   kubectl delete -f prometheus-configmap.yml | exit 0
+                   kubectl apply -f prometheus-configmap.yml 
+                   kubectl delete -f prometheus-deploy.yml | exit 0
+                   kubectl apply -f prometheus-deploy.yml
+                   '''
+               }
+        
+        }
+    }
+}
