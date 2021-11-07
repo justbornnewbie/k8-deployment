@@ -1,0 +1,42 @@
+def git_url = 'https://github.com/rjmsas/k8-deployment.git'
+def git_branch = 'main'
+
+pipeline
+{
+    agent
+    {
+        label 'k8'
+    }
+
+    stages
+    {
+        stage('postgress-deploy')
+        {
+            
+            steps{
+                   sh '''
+                   pwd
+                   ls -ltr                   
+                   cd sonarqube
+                   kubectl delete -f postgres-deploy.yml | exit 0
+                   kubectl apply -f postgres-deploy.yml 
+                   '''
+               }
+        
+        }
+       stage('sonarqube-deploy')
+        {
+            
+            steps{
+                   sh '''
+                   pwd
+                   ls -ltr                   
+                   cd sonarqube
+                   kubectl delete -f sonarqube-deploy.yml | exit 0
+                   kubectl apply -f sonarqube-deploy.yml 
+                   '''
+               }
+        
+        }
+    }
+}
