@@ -6,34 +6,34 @@ metadata:
     name: haproxy-configmap
 data:
   haproxy.cfg: |-
-  global
-        user haproxy
-        group haproxy
-        daemon
+    global
+          user haproxy
+          group haproxy
+          daemon
 
-  defaults
-          log     global
-          mode    http
-          timeout connect 10s
-          timeout client  60s
-          timeout server  60s
+    defaults
+            log     global
+            mode    http
+            timeout connect 10s
+            timeout client  60s
+            timeout server  60s
 
-  frontend http_in
-          mode http
-          bind *:80
-          acl host_jenkins hdr(host) -i jenkins.lelebey.com
+    frontend http_in
+            mode http
+            bind *:80
+            acl host_jenkins hdr(host) -i jenkins.lelebey.com
 
-          use_backend http_jenkins if host_jenkins
+            use_backend http_jenkins if host_jenkins
 
-          acl host_server2 hdr(host) -i grafana.lelebey.com
+            acl host_server2 hdr(host) -i grafana.lelebey.com
 
-          use_backend http_server2 if host_server2
+            use_backend http_server2 if host_server2
 
 
-  backend http_jenkins
-          mode http
-          server server1 192.68.0.107:30000
+    backend http_jenkins
+            mode http
+            server server1 192.68.0.107:30000
 
-  backend http_server2
-          mode http
-          server server2 192.68.0.107:30002
+    backend http_server2
+            mode http
+            server server2 192.68.0.107:30002
