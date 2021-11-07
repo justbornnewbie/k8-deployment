@@ -1,0 +1,30 @@
+def git_url = 'https://github.com/rjmsas/k8-deployment.git'
+def git_branch = 'main'
+
+pipeline
+{
+    agent
+    {
+        label 'k8'
+    }
+
+    stages
+    {
+        stage('deploy-haproxy')
+        {
+            
+            steps{
+                   sh '''
+                   pwd
+                   ls -ltr                   
+                   cd haproxy
+                   kubectl delete -f haproxy-configmap.yml | exit 0
+                   kubectl apply -f haproxy-configmap.yml 
+                   kubectl delete -f haproxy-deploy.yml | exit 0
+                   kubectl apply -f haproxy-deploy.yml
+                   '''
+               }
+        
+        }
+    }
+}
